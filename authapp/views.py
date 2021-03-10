@@ -3,7 +3,7 @@ from django.contrib import auth
 from django.urls import reverse
 from django.contrib import messages
 
-from authapp.forms import UserLoginForm, UserRegisterForm
+from authapp.forms import UserLoginForm, UserRegisterForm,UserProfileForm
 
 
 def login(request):
@@ -16,8 +16,7 @@ def login(request):
             if user and user.is_active:
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse('index'))
-        else:
-            print(form.errors)
+
     else:
         form = UserLoginForm()
     context = {'form': form}
@@ -30,8 +29,7 @@ def register(request):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('auth:login'))
-        else:
-            print(form.errors)
+
     else:
         form = UserRegisterForm()
     context = {'form': form}
@@ -43,4 +41,12 @@ def logout(request):
     return HttpResponseRedirect(reverse('index'))
 
 def profile(request):
-    return render(request, 'authapp/profile.html')
+    if request.method == 'POST':
+        form = UserProfileForm(data=request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('auth:profile'))
+    else:
+        form = UserProfileForm(instance=request.user)
+    context = {'form': form}
+    return render(request, 'authapp/profile.html', context)
