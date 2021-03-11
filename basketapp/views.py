@@ -1,5 +1,3 @@
-from django.shortcuts import render
-
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
 
@@ -27,4 +25,3 @@ def basket_delete(request, id=None):
     basket = Basket.objects.get(id=id)
     basket.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
