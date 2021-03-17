@@ -4,22 +4,20 @@ from django.core.paginator import Paginator
 from mainapp.models import Product, ProductCategory
 
 
-
 def index(request):
-    context = {'title': 'GeekShop',
-               'name': 'GeekShop Store'}
+    context = {'title': 'GeekShop'}
     return render(request, 'mainapp/index.html', context)
 
 
 def products(request, category_id=None, page=1):
-    context = {
-        'tittle': "GeekShop",
-        'products': ProductCategory.objects.all(),
-        }
+    context = {'title': 'GeekShop - Каталог',
+               'categories': ProductCategory.objects.all()
+               }
     if category_id:
         products = Product.objects.filter(category_id=category_id).order_by('-price')
     else:
         products = Product.objects.all().order_by('-price')
+
     paginator = Paginator(products, 3)
     products_paginator = paginator.page(page)
     context.update({'products': products_paginator})
