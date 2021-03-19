@@ -1,20 +1,24 @@
 from django.shortcuts import render
-from mainapp.models import Product, ProductCategory
-import os
+from django.core.paginator import Paginator
 
-dir = os.path.dirname(__file__)
+from mainapp.models import Product, ProductCategory
+
 
 def index(request):
-    context = {'title': 'GeekShop',
-               'name': 'GeekShop Store'}
+    context = {'title': 'GeekShop'}
     return render(request, 'mainapp/index.html', context)
 
 
-def products(request, id=None):
-    context = {
-        'tittle': "GeekShop",
-        'products': Product.objects.all(),
-        'categories': ProductCategory.objects.all(),
+def products(request, category_id=None, page=1):
+    context = {'title': 'GeekShop - Каталог',
+               'categories': ProductCategory.objects.all()
+               }
+    if category_id:
+        products = Product.objects.filter(category_id=category_id).order_by('-price')
+    else:
+        products = Product.objects.all().order_by('-price')
 
-    }
+    paginator = Paginator(products, 3)
+    products_paginator = paginator.page(page)
+    context.update({'products': products_paginator})
     return render(request, 'mainapp/products.html', context)
