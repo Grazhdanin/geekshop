@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponseRedirect
-from django.contrib.auth.decorators import user_passes_test
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import user_passes_test
 from django.utils.decorators import method_decorator
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -9,10 +9,8 @@ from authapp.models import User
 from adminapp.forms import UserAdminRegistrationForm, UserAdminProfileForm
 
 
-
-
-
-
+# FBV = Function-Based-View
+# CBV = Class-Based-View
 
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
